@@ -13,10 +13,11 @@ build-type:          Simple
 extra-source-files:  CHANGELOG.md
 cabal-version:       >=1.10
 
-executable raaz-crypto-github-io
+executable site
   main-is:             Main.hs
   -- other-modules:
   -- other-extensions:
   build-depends:       base >=4.11 && <4.12
+               ,       hakyll
   hs-source-dirs:      src
   default-language:    Haskell2010
