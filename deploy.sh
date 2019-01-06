@@ -25,6 +25,7 @@ fi
 
 # Get previous files
 git fetch --all
+git branch -D master
 git checkout -b master --track github/master
 
 # Overwrite existing files with new files
