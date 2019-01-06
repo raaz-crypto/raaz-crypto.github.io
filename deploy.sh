@@ -10,6 +10,11 @@ git checkout develop
 cabal new-build
 cabal new-exec site build
 
+# Build html documentations for verse
+make -C verse-coq html
+mkdir -p _site/doc/verse
+mv verse-coq/html _site/doc/verse
+
 # Get previous files
 git fetch --all
 git checkout -b master --track github/master
