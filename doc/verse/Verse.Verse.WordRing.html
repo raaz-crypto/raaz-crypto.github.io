@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.WordRing</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.WordRing</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Word.html#"><span class="id" title="library">Verse.Word</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.NFacts.html#"><span class="id" title="library">Verse.NFacts</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#"><span class="id" title="library">Coq.setoid_ring.Ring_theory</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Numbers.BinNums.html#"><span class="id" title="library">BinNums</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.ZArith.BinInt.html#"><span class="id" title="library">BinInt</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.NArith.html#"><span class="id" title="library">NArith</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local</span> <span class="id" title="keyword">Notation</span> <a name="wO"><span class="id" title="abbreviation">wO</span></a>   := (<a class="idref" href="Verse.Verse.Word.html#bits"><span class="id" title="constructor">bits</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.Ndigits.html#N2Bv_gen"><span class="id" title="definition">N2Bv_gen</span></a> <span class="id" title="var">_</span> 0)).<br/>
+<span class="id" title="keyword">Local</span> <span class="id" title="keyword">Notation</span> <a name="wI"><span class="id" title="abbreviation">wI</span></a>   := (<a class="idref" href="Verse.Verse.Word.html#bits"><span class="id" title="constructor">bits</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.Ndigits.html#N2Bv_gen"><span class="id" title="definition">N2Bv_gen</span></a> <span class="id" title="var">_</span> 1)).<br/>
+<span class="id" title="keyword">Local</span> <span class="id" title="keyword">Notation</span> <a name="wadd"><span class="id" title="abbreviation">wadd</span></a> := (<a class="idref" href="Verse.Verse.Word.html#numBinOp"><span class="id" title="definition">numBinOp</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.add"><span class="id" title="definition">N.add</span></a>).<br/>
+<span class="id" title="keyword">Local</span> <span class="id" title="keyword">Notation</span> <a name="wmul"><span class="id" title="abbreviation">wmul</span></a> := (<a class="idref" href="Verse.Verse.Word.html#numBinOp"><span class="id" title="definition">numBinOp</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul"><span class="id" title="definition">N.mul</span></a>).<br/>
+<span class="id" title="keyword">Local</span> <span class="id" title="keyword">Notation</span> <a name="weq"><span class="id" title="abbreviation">weq</span></a>  := (@<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#eq"><span class="id" title="inductive">eq</span></a> (<a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <span class="id" title="var">_</span>)).<br/>
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="WordRing"><span class="id" title="section">WordRing</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="WordRing.n"><span class="id" title="variable">n</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Infix</span> <a name="4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">&quot;</span></a>==" := <a class="idref" href="Verse.Verse.WordRing.html#weq"><span class="id" title="abbreviation">weq</span></a> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 70).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Ltac</span> <span class="id" title="var">crush_mod_ring</span> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">intros</span> []); <span class="id" title="tactic">unfold</span> <a class="idref" href="Verse.Verse.Word.html#numBinOp"><span class="id" title="definition">numBinOp</span></a>, <a class="idref" href="Verse.Verse.Word.html#numUnaryOp"><span class="id" title="definition">numUnaryOp</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#f_equal"><span class="id" title="lemma">f_equal</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="Verse.Verse.NFacts.html#Bv2N_inj"><span class="id" title="lemma">Bv2N_inj</span></a>; <span class="id" title="tactic">rewrite</span> ?<a class="idref" href="Verse.Verse.NFacts.html#Bv2N_N2Bv_gen_mod"><span class="id" title="lemma">Bv2N_N2Bv_gen_mod</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">simpl</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">rewrite</span> ?<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.add_mod_idemp_l"><span class="id" title="lemma">N.add_mod_idemp_l</span></a>);<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> ?<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.add_mod_idemp_r"><span class="id" title="lemma">N.add_mod_idemp_r</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> ?<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_mod_idemp_l"><span class="id" title="lemma">N.mul_mod_idemp_l</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> ?<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_mod_idemp_r"><span class="id" title="lemma">N.mul_mod_idemp_r</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_1_l"><span class="id" title="lemma">N.mul_1_l</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_add_distr_l"><span class="id" title="lemma">N.mul_add_distr_l</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_add_distr_r"><span class="id" title="lemma">N.mul_add_distr_r</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">trivial</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.add_assoc"><span class="id" title="lemma">N.add_assoc</span></a> +<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_assoc"><span class="id" title="lemma">N.mul_assoc</span></a> +<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.add_comm"><span class="id" title="lemma">N.add_comm</span></a>  +<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mul_comm"><span class="id" title="lemma">N.mul_comm</span></a>  +<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N.mod_small"><span class="id" title="lemma">N.mod_small</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">trivial</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">discriminate</span> + <span class="id" title="tactic">apply</span> <a class="idref" href="Verse.Verse.NFacts.html#two_power_nonzero"><span class="id" title="lemma">two_power_nonzero</span></a> + <span class="id" title="tactic">apply</span> <a class="idref" href="Verse.Verse.NFacts.html#Bv2N_small"><span class="id" title="lemma">Bv2N_small</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wadd_0_l"><span class="id" title="lemma">wadd_0_l</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">x</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>), <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wO"><span class="id" title="abbreviation">wO</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wadd_comm"><span class="id" title="lemma">wadd_comm</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">x</span> <span class="id" title="var">y</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>), <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wadd_assoc"><span class="id" title="lemma">wadd_assoc</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>), <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>) <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a>) <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wmul_1_l"><span class="id" title="lemma">wmul_1_l</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>, <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wI"><span class="id" title="abbreviation">wI</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wmul_0_l"><span class="id" title="lemma">wmul_0_l</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>, <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wO"><span class="id" title="abbreviation">wO</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wO"><span class="id" title="abbreviation">wO</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wmul_comm"><span class="id" title="lemma">wmul_comm</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>, <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wmul_assoc"><span class="id" title="lemma">wmul_assoc</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>, <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>) <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a>) <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a name="wdistr_l"><span class="id" title="lemma">wdistr_l</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> : <a class="idref" href="Verse.Verse.Word.html#t"><span class="id" title="inductive">Word.t</span></a> <a class="idref" href="Verse.Verse.WordRing.html#WordRing.n"><span class="id" title="variable">n</span></a>, <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a>) <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a> <a class="idref" href="Verse.Verse.WordRing.html#4173b3749705dda16f96b7bcb615eae6"><span class="id" title="notation">==</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> (<a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>) (<a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#y"><span class="id" title="variable">y</span></a> <a class="idref" href="Verse.Verse.WordRing.html#z"><span class="id" title="variable">z</span></a>).<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">crush_mod_ring</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="mod_semi_ring"><span class="id" title="definition">mod_semi_ring</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#semi_ring_theory"><span class="id" title="record">semi_ring_theory</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wO"><span class="id" title="abbreviation">wO</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wI"><span class="id" title="abbreviation">wI</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wadd"><span class="id" title="abbreviation">wadd</span></a> <a class="idref" href="Verse.Verse.WordRing.html#wmul"><span class="id" title="abbreviation">wmul</span></a> <a class="idref" href="Verse.Verse.WordRing.html#weq"><span class="id" title="abbreviation">weq</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{|<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRadd_0_l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wadd_0_l</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRadd_comm</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wadd_comm</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRadd_assoc</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wadd_assoc</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRmul_1_l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wmul_1_l</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRmul_0_l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wmul_0_l</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRmul_comm</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wmul_comm</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRmul_assoc</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wmul_assoc</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">SRdistr_l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">:=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.setoid_ring.Ring_theory.html#mk_srt"><span class="id" title="constructor">wdistr_l</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|}.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Add</span> <span class="id" title="var">Ring</span> <span class="id" title="var">Word</span> : <a class="idref" href="Verse.Verse.WordRing.html#mod_semi_ring"><span class="id" title="definition">mod_semi_ring</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.WordRing.html#WordRing"><span class="id" title="section">WordRing</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

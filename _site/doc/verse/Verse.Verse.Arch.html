@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.Arch</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.Arch</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Language.html#"><span class="id" title="library">Verse.Language</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Syntax.html#"><span class="id" title="library">Verse.Syntax</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Types.Internal.html#"><span class="id" title="library">Verse.Types.Internal</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.PrettyPrint.html#"><span class="id" title="library">Verse.PrettyPrint</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Types.html#"><span class="id" title="library">Verse.Types</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Error.html#"><span class="id" title="library">Verse.Error</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#"><span class="id" title="library">String</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#"><span class="id" title="library">List</span></a>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">ListNotations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Sets.Ensembles.html#"><span class="id" title="library">Ensembles</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab5"></a><h1 class="section">Architecture</h1>
+
+
+<div class="paragraph"> </div>
+
+An architecture is characterised by its
+
+<div class="paragraph"> </div>
+
+1. register set
+
+<div class="paragraph"> </div>
+
+2. the instruction set
+
+<div class="paragraph"> </div>
+
+An abstract assembly language program in this architecture uses both
+registers and stack variables. We abstract such variables in the type
+machine var. The architecture should provide a translation of the
+instruction that use machine vars to actual machine code.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Type</span> <a name="ARCH"><span class="id" title="module">ARCH</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Name of the architecture family 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.archName"><span class="id" title="axiom">archName</span></a>     : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The Types of machine variables and a denotation of Verse types into them 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.mType"><span class="id" title="axiom">mType</span></a>        : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.mTypeDenote"><span class="id" title="axiom">mTypeDenote</span></a>  : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">k</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> ⇒ <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a> <a class="idref" href="Verse.Verse.Arch.html#k"><span class="id" title="variable">k</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">+</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">{</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#UnsupportedType"><span class="id" title="inductive">UnsupportedType</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">}</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.mConstant"><span class="id" title="axiom">mConstant</span></a>       : <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.mConstantDenote"><span class="id" title="axiom">mConstantDenote</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>) (<span class="id" title="var">p</span> : <a class="idref" href="Verse.Verse.Error.html#noErr"><span class="id" title="definition">noErr</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#typeDenote"><span class="id" title="definition">typeDenote</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a>)),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Arch.html#ARCH.mConstant"><span class="id" title="axiom">mConstant</span></a> (<a class="idref" href="Verse.Verse.Error.html#getT"><span class="id" title="definition">getT</span></a> <a class="idref" href="Verse.Verse.Arch.html#p"><span class="id" title="variable">p</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The registers for this architecture 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.register"><span class="id" title="axiom">register</span></a> : <a class="idref" href="Verse.Verse.Syntax.html#GenVariableT"><span class="id" title="definition">GenVariableT</span></a> <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.mVar"><span class="id" title="axiom">mVar</span></a> : <a class="idref" href="Verse.Verse.Syntax.html#GenVariableT"><span class="id" title="definition">GenVariableT</span></a> <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+A way to embed register into the machine variable 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.embedRegister"><span class="id" title="axiom">embedRegister</span></a> : <span class="id" title="keyword">∀</span> {<span class="id" title="var">k</span>}{<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a> <a class="idref" href="Verse.Verse.Arch.html#k"><span class="id" title="variable">k</span></a>}, <a class="idref" href="Verse.Verse.Arch.html#ARCH.register"><span class="id" title="axiom">register</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Arch.html#ARCH.mVar"><span class="id" title="axiom">mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Encode the architecture specific restrictions on the instruction set 
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.HostEndian"><span class="id" title="axiom">HostEndian</span></a>    : <a class="idref" href="Verse.Verse.Types.Internal.html#endian"><span class="id" title="inductive">endian</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.Word"><span class="id" title="axiom">Word</span></a>          : <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+      When generating code for a function, we need to know the following
+
+<div class="paragraph"> </div>
+
+      1. How much additional space on the stack is to be reserved for use
+         by local variables.
+
+<div class="paragraph"> </div>
+
+      2. What registers should be saved by the function.
+
+<div class="paragraph"> </div>
+
+      3. Any other architecture specific information.
+
+<div class="paragraph"> </div>
+
+      The functionDescription gives these information.
+
+<div class="paragraph"> </div>
+
+   
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.functionDescription"><span class="id" title="axiom">functionDescription</span></a> : <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="ARCH.functionPrototype"><span class="id" title="axiom">functionPrototype</span></a> : <a class="idref" href="Verse.Verse.Arch.html#ARCH.functionDescription"><span class="id" title="axiom">functionDescription</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.html#Prototype"><span class="id" title="record">Prototype</span></a> <a class="idref" href="Verse.Verse.Arch.html#ARCH.mType"><span class="id" title="axiom">mType</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Arch.html#ARCH"><span class="id" title="module">ARCH</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab6"></a><h1 class="section">Frame management.</h1>
+
+
+<div class="paragraph"> </div>
+
+The next module abstracts the machine dependent frame management for
+functions in verse.  A verse function supports only statements that
+refer to the following types of variables.
+
+<div class="paragraph"> </div>
+
+1. The parameters
+
+<div class="paragraph"> </div>
+
+2. The local variables.
+
+<div class="paragraph"> </div>
+
+In particular, we do not have nested functions and hence all variables
+mentioned in the function are within the current frame.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Type</span> <a name="FRAME"><span class="id" title="module">FRAME</span></a>(<span class="id" title="var">A</span> : <a class="idref" href="Verse.Verse.Arch.html#ARCH"><span class="id" title="module">ARCH</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The state of the frame as seen from the callee when it is
+      entered. The type <span class="inlinecode"><a class="idref" href="Verse.Verse.Arch.C.html#CFrame.frameState"><span class="id" title="definition">frameState</span></a></span> captures the description of the
+      function calling frame.  This includes information on the
+      registers and stack locations used for the parameters and local
+      variables.  The frame also has comes with a name, the name of
+      the function.  It is this name that allows it to be called from
+      a C program.
+
+<div class="paragraph"> </div>
+
+   
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.frameState"><span class="id" title="axiom">frameState</span></a> : <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The expression <span class="inlinecode"><a class="idref" href="Verse.Verse.Arch.C.html#CFrame.emptyFrame"><span class="id" title="definition">emptyFrame</span></a></span> <span class="inlinecode">&quot;<span class="id" title="var">foo</span>&quot;</span> creates an empty frame for a function named "foo" 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.emptyFrame"><span class="id" title="axiom">emptyFrame</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The expression <span class="inlinecode"><span class="id" title="var">itreateFrame</span></span> <span class="inlinecode">&quot;<span class="id" title="var">foo</span>&quot;</span> <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Pretty.html#Indexing.ty"><span class="id" title="variable">ty</span></a></span> creates a function frame for a function that iterates
+      over blocks of type <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Pretty.html#Indexing.ty"><span class="id" title="variable">ty</span></a></span>. It returns two machine variables the first is the variable the iterates
+      over the blocks and the other is a machine variables that keeps track of how many blocks are left
+      to be iterated over.
+   
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.iterateFrame"><span class="id" title="axiom">iterateFrame</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">∀</span> <span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">(</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#some"><span class="id" title="definition">some</span></a> (@<a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.Word"><span class="id" title="axiom">A.Word</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab7"></a><h2 class="section">Parameter and local varaible allocation</h2>
+
+
+<div class="paragraph"> </div>
+
+  The next few function builds the function frame incrementally. We
+  can add a parameter to the function, allocate a local variable or
+  mark a register for use in the function.
+
+<div class="paragraph"> </div>
+
+   Add parameter to the function frame. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.addParam"><span class="id" title="axiom">addParam</span></a> : <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">k</span> (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="Verse.Verse.Arch.html#k"><span class="id" title="variable">k</span></a>), <a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Allocate a local varaible on the stack 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.stackAlloc"><span class="id" title="axiom">stackAlloc</span></a> : <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">∀</span> (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>), <a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Mark a register for use 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.useRegister"><span class="id" title="axiom">useRegister</span></a> : <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">∀</span> (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>)(<span class="id" title="var">r</span> : <a class="idref" href="Verse.Verse.Arch.html#A.register"><span class="id" title="axiom">A.register</span></a> <a class="idref" href="Verse.Verse.Arch.html#ty"><span class="id" title="variable">ty</span></a>), <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Finally we generate the function description from the frame
+      state. When creating the function description, we should call
+      this at the end after all the stack, register and parameters
+      have been fixed.
+   
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="FRAME.description"><span class="id" title="axiom">description</span></a> : <a class="idref" href="Verse.Verse.Arch.html#FRAME.frameState"><span class="id" title="axiom">frameState</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.functionDescription"><span class="id" title="axiom">A.functionDescription</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Arch.html#FRAME"><span class="id" title="module">FRAME</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Type</span> <a name="CODEGEN"><span class="id" title="module">CODEGEN</span></a> (<span class="id" title="var">A</span> : <a class="idref" href="Verse.Verse.Arch.html#ARCH"><span class="id" title="module">ARCH</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+How the instruction operands relate to the machine variables 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.mArg"><span class="id" title="axiom">mArg</span></a>               : <a class="idref" href="Verse.Verse.Syntax.html#GenVariableT"><span class="id" title="definition">GenVariableT</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Syntax.html#GenVariableT"><span class="id" title="definition">GenVariableT</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.mArgDenote"><span class="id" title="axiom">mArgDenote</span></a>         : <a class="idref" href="Verse.Verse.Language.Ast.html#argC"><span class="id" title="class">argC</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mTypeDenote"><span class="id" title="axiom">A.mTypeDenote</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mConstant"><span class="id" title="axiom">A.mConstant</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mArg"><span class="id" title="axiom">mArg</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Machine instructions and an encoding of Verse instructions into them 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.mInstruction"><span class="id" title="axiom">mInstruction</span></a>       : <span class="id" title="keyword">Type</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.mInstructionDenote"><span class="id" title="axiom">mInstructionDenote</span></a> : <a class="idref" href="Verse.Verse.Language.Ast.html#instructionC"><span class="id" title="class">instructionC</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mArg"><span class="id" title="axiom">mArg</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mInstruction"><span class="id" title="axiom">mInstruction</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Bulk cryptographic primitives like ciphers, hashes, etc, require
+      processing a sequence of blocks. This member function loops over
+      a sequence of blocks of message type msgTy and runs the body on
+      each of this block. It makes use of two machine variable. The
+      first is a variable that (at the start of the loop) points to
+      the start of the sequence and the second contains the number of
+      blocks in the sequence.  This higher order function takes care
+      of wrapping the body with an appropriate preamble and ensures
+      incrementing the blockPtr appropriately.  
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.loopWrapper"><span class="id" title="axiom">loopWrapper</span></a> : <span class="id" title="keyword">∀</span> (<span class="id" title="var">blockType</span> : <a class="idref" href="Verse.Verse.Arch.html#A.mType"><span class="id" title="axiom">A.mType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#blockType"><span class="id" title="variable">blockType</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> </div>
+
+<div class="doc">
+The variable that points to the start of sequence   
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Arch.html#A.mVar"><span class="id" title="axiom">A.mVar</span></a> <a class="idref" href="Verse.Verse.Arch.html#A.Word"><span class="id" title="axiom">A.Word</span></a>     <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> </div>
+
+<div class="doc">
+The variable that contains number of elements left  
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mInstruction"><span class="id" title="axiom">mInstruction</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> </div>
+
+<div class="doc">
+The body of the block                               
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mInstruction"><span class="id" title="axiom">mInstruction</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Emit the code for a code block 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.emit"><span class="id" title="axiom">emit</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN.mInstruction"><span class="id" title="axiom">mInstruction</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.PrettyPrint.html#Doc"><span class="id" title="inductive">Doc</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Instruction(s) to be added to the begining of the code given its
+      frameState. These instructions typically allocated space on the
+      stack and save caller set of registers (on th stack) 
+<div class="paragraph"> </div>
+
+ Create a function given its description and body 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CODEGEN.makeFunction"><span class="id" title="axiom">makeFunction</span></a> : <a class="idref" href="Verse.Verse.Arch.html#A.functionDescription"><span class="id" title="axiom">A.functionDescription</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.PrettyPrint.html#Doc"><span class="id" title="inductive">Doc</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.PrettyPrint.html#Doc"><span class="id" title="inductive">Doc</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Arch.html#CODEGEN"><span class="id" title="module">CODEGEN</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

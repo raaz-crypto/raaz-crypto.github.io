@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.Language.Utils</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.Language.Utils</h1>
+
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab16"></a><h1 class="section">Utility functions.</h1>
+
+
+<div class="paragraph"> </div>
+
+When working with verse we often need to write repetitive coding
+patterns. This section documents some helper functions to facilitate
+refactoring such code. Once can think of such helpers as "assembler
+macros" and one of the advantage of using a DSL is that such "macros"
+can be implemented in the host language; coq in this case.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Section</span> <a name="Utils.Looping"><span class="id" title="section">Looping</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab17"></a><h2 class="section">Looping.</h2>
+
+
+<div class="paragraph"> </div>
+
+     Verse supports bounded loops, i.e. loops that unfold into code.
+     A loop for us is parameterised by two quantities, a program
+     variable <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.v"><span class="id" title="variable">v</span></a></span> and a bound <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.b"><span class="id" title="variable">b</span></a></span>. A loop index is a some <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.poly1305.c.portable.html#Internal.Poly1305.LoadStore64.i"><span class="id" title="variable">i</span></a></span> <span class="inlinecode">&lt;</span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.b"><span class="id" title="variable">b</span></a></span>.
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.Looping.A"><span class="id" title="variable">A</span></a> : <span class="id" title="keyword">Type</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.Looping.b"><span class="id" title="variable">b</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+       The <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span> function is the most general looping function. It
+       takes as input a list of loop indices and executes (in
+       sequence) its body for each of these indices
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="foreach"><span class="id" title="definition">foreach</span></a> (<span class="id" title="var">ixs</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">{</span></a><span class="id" title="var">ix</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">|</span></a> <span class="id" title="var">ix</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping.b"><span class="id" title="variable">b</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">}</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span> : <span class="id" title="keyword">∀</span> <span class="id" title="var">ix</span>, <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping.b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping.A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:= <span class="id" title="keyword">let</span> <span class="id" title="var">mapper</span> := <span class="id" title="keyword">fun</span> <span class="id" title="var">ix</span> ⇒ <span class="id" title="keyword">match</span> <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| @<span class="id" title="var">exist</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">i</span> <span class="id" title="var">pf</span> ⇒ <a class="idref" href="Verse.Verse.Language.Utils.html#f"><span class="id" title="variable">f</span></a> <span class="id" title="var">i</span> <span class="id" title="var">pf</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">in</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#concat"><span class="id" title="definition">List.concat</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#map"><span class="id" title="definition">List.map</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#mapper"><span class="id" title="variable">mapper</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#ixs"><span class="id" title="variable">ixs</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The code fragment <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#iterate"><span class="id" title="definition">iterate</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.f"><span class="id" title="variable">f</span></a></span> executes the commands <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.f"><span class="id" title="variable">f</span></a></span> <span class="inlinecode">0,</span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.f"><span class="id" title="variable">f</span></a></span> <span class="inlinecode">1,</span>
+      <span class="inlinecode">...</span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.f"><span class="id" title="variable">f</span></a></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.b"><span class="id" title="variable">b</span></a></span> <span class="inlinecode">-</span> <span class="inlinecode">1)</span> in sequence.  Note that the program variable type
+      v and the bound b are both implicit argument that is infered
+      from the input argument <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.f"><span class="id" title="variable">f</span></a></span>.
+     
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="iterate"><span class="id" title="definition">iterate</span></a>   := <a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#loop"><span class="id" title="definition">loop</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping.b"><span class="id" title="variable">b</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Similar to <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#iterate"><span class="id" title="definition">iterate</span></a></span> but does in the reverse order 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="iterate_reverse"><span class="id" title="definition">iterate_reverse</span></a> := <a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#rev"><span class="id" title="definition">List.rev</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#loop"><span class="id" title="definition">loop</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping.b"><span class="id" title="variable">b</span></a>)).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.Looping"><span class="id" title="section">Looping</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> [<span class="id" title="var">A</span> <span class="id" title="var">b</span>] <span class="id" title="var">_</span> <span class="id" title="var">_</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Language.Utils.html#iterate"><span class="id" title="definition">iterate</span></a> [<span class="id" title="var">A</span> <span class="id" title="var">b</span>] <span class="id" title="var">_</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Language.Utils.html#iterate_reverse"><span class="id" title="definition">iterate_reverse</span></a> [<span class="id" title="var">A</span> <span class="id" title="var">b</span>] <span class="id" title="var">_</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Section</span> <a name="Utils.ArrayUtils"><span class="id" title="section">ArrayUtils</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab18"></a><h2 class="section">Looping over array indices.</h2>
+
+
+<div class="paragraph"> </div>
+
+A common coding pattern is where we need to perform some action on all
+the elements in an array. We now give functions and types that
+simplify such looping over all the indices of the array. Let <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.A"><span class="id" title="projection">A</span></a></span> be an
+array variable, then the function <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.A"><span class="id" title="projection">A</span></a></span> gives such a list in
+increasing order starting from 0. We can then use <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span> function
+defined above to actually loop over these indices using the idiom
+<span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.A"><span class="id" title="projection">A</span></a>)</span> <span class="inlinecode"><span class="id" title="var">doSomethingWithIndex</span></span>. The net result is an
+unrolled loop that does some computation on every index of A. If one
+wants to perform such a loop in the reverse order on can use the
+function <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#indices_reversed"><span class="id" title="definition">indices_reversed</span></a></span> instead of <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a></span>.
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> : <a class="idref" href="Verse.Verse.Syntax.html#VariableT"><span class="id" title="definition">VariableT</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#endian"><span class="id" title="inductive">endian</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+     This function returns the list of valid indices of an array
+     variable. The indices are given starting from <span class="inlinecode">0</span> to <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.b"><span class="id" title="variable">b</span></a></span> <span class="inlinecode">-</span>
+     <span class="inlinecode">1</span>. Mostly used in conjunction with <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span>.
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="indices"><span class="id" title="definition">indices</span></a> (<span class="id" title="var">arr</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>)) :  <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#Indices"><span class="id" title="definition">Indices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:= <a class="idref" href="Verse.Verse.Language.Utils.html#loop"><span class="id" title="definition">loop</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This function is similar to indices but gives the indices in the
+      reverse order.  
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="indices_reversed"><span class="id" title="definition">indices_reversed</span></a> (<span class="id" title="var">arr</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>)) := <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#rev"><span class="id" title="definition">List.rev</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab19"></a><h2 class="section">Indexing variables uniformly.</h2>
+
+
+<div class="paragraph"> </div>
+
+Programming with arrays is convenient because it gives a uniform way
+to index elements which together with functions like <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span>, and
+<span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a></span>, gives concise representation of repetitive coding
+pattern. However, array indexing involves a memory operation which is
+much slower than using registers. A technique that is often uses is to
+"cache" the array in a set of registers <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.poly1305.c.portable.html#Internal.Poly1305.r0"><span class="id" title="variable">r0</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.poly1305.c.portable.html#Internal.Poly1305.r1"><span class="id" title="variable">r1</span></a>...</span>, and use this
+registers instead.  But now we loose the ability to index the elements
+uniformly which makes it tedious to write code that could otherwise be
+handled conveniently using macros like <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a></span>.
+
+<div class="paragraph"> </div>
+
+The indexing problem is to give a uniform way to index a sequence of
+program variables <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.blake2.c.portable.html#Blake2.Program.v0"><span class="id" title="variable">v0</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.blake2.c.portable.html#Blake2.Program.v1"><span class="id" title="variable">v1</span></a>,...</span> using their position in the list as the
+index. We solve this indexing problem as follows: We define the
+function <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Utils.html#varIndex"><span class="id" title="definition">varIndex</span></a></span> that takes a vector of variables <span class="inlinecode"><span class="id" title="var">v_0</span>,<span class="id" title="var">v_1</span>...</span> and
+returns the indexing function into the variables <span class="inlinecode"><span class="id" title="var">v_0</span>,...</span>, i.e. the
+indexing function takes an index <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.poly1305.c.portable.html#Internal.Poly1305.LoadStore64.i"><span class="id" title="variable">i</span></a></span> and returns the <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.poly1305.c.portable.html#Internal.Poly1305.LoadStore64.i"><span class="id" title="variable">i</span></a></span>th variable
+<span class="inlinecode"><span class="id" title="var">v_i</span></span>.
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Require</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#"><span class="id" title="library">Vector</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="VarIndex"><span class="id" title="definition">VarIndex</span></a> := <span class="id" title="keyword">∀</span> <span class="id" title="var">i</span>, <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> @<a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="varIndex"><span class="id" title="definition">varIndex</span></a> (<span class="id" title="var">regs</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> (@<a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>) <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="Verse.Verse.Language.Utils.html#VarIndex"><span class="id" title="definition">VarIndex</span></a> := <span class="id" title="keyword">fun</span> <span class="id" title="var">_</span> <span class="id" title="var">pf</span>  ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#nth_order"><span class="id" title="definition">Vector.nth_order</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#regs"><span class="id" title="variable">regs</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+One important use case for uniform indexing is the caching of arrays
+into a sequence of registers. We now give some helper functions
+that load and store arrays into their register cache.
+
+<div class="paragraph"> </div>
+
+     
+<div class="paragraph"> </div>
+
+ This macro loads the array to the corresponding chached variables 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="loadCache"><span class="id" title="definition">loadCache</span></a> (<span class="id" title="var">arr</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>)) (<span class="id" title="var">ch</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#VarIndex"><span class="id" title="definition">VarIndex</span></a>) : <a class="idref" href="Verse.Verse.Language.Ast.html#code"><span class="id" title="definition">code</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">i</span> <span class="id" title="var">pf</span> ⇒ <span class="id" title="keyword">let</span> <span class="id" title="var">ix</span> := @<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#exist"><span class="id" title="constructor">exist</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">arrI</span> := <a class="idref" href="Verse.Verse.Language.Ast.html#index"><span class="id" title="constructor">index</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">chI</span> := <a class="idref" href="Verse.Verse.Language.Ast.html#var"><span class="id" title="constructor">var</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#ch"><span class="id" title="variable">ch</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a>) <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">[</span></a> <a class="idref" href="Verse.Verse.Language.Ast.html#inst"><span class="id" title="constructor">inst</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#assign"><span class="id" title="constructor">assign</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#assign2"><span class="id" title="constructor">assign2</span></a> <a class="idref" href="Verse.Verse.Language.Operators.html#nop"><span class="id" title="constructor">nop</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#chI"><span class="id" title="variable">chI</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arrI"><span class="id" title="variable">arrI</span></a>)) <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">]</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+      This macro moves back the cached values to the given array. In
+      essence this macro uses the move instruction on all the cached
+      variables. This has the following consequence.
+
+<div class="paragraph"> </div>
+
+      1. The values stored in the cached variables are clobbered at
+         the end, which and hence should not be used subsequently.
+
+<div class="paragraph"> </div>
+
+      2. This macro moves all the cached values back into their
+n         respective positions in the array. If only few of the cached
+         variables are updated since caching, it might be more
+         efficient to just move those explicitly.
+
+<div class="paragraph"> </div>
+
+     
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="moveBackCache"><span class="id" title="definition">moveBackCache</span></a> (<span class="id" title="var">arr</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>)) (<span class="id" title="var">ch</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#VarIndex"><span class="id" title="definition">VarIndex</span></a>)  : <a class="idref" href="Verse.Verse.Language.Ast.html#code"><span class="id" title="definition">code</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">i</span> <span class="id" title="var">pf</span> ⇒ <span class="id" title="keyword">let</span> <span class="id" title="var">ix</span> := @<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#exist"><span class="id" title="constructor">exist</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">[</span></a> <a class="idref" href="Verse.Verse.Language.Ast.html#inst"><span class="id" title="constructor">inst</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#moveTo"><span class="id" title="constructor">moveTo</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#ch"><span class="id" title="variable">ch</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a>)) <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">]</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+      This function is similar <span class="inlinecode"><span class="id" title="var">moveCacheBack</span></span>, except that it
+      preserves the values in the cache variables. The cached
+      variables can then be reused in the rest of the program.
+     
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="backupCache"><span class="id" title="definition">backupCache</span></a>  (<span class="id" title="var">arr</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a>  <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.ty"><span class="id" title="variable">ty</span></a>)) (<span class="id" title="var">ch</span> : <a class="idref" href="Verse.Verse.Language.Utils.html#VarIndex"><span class="id" title="definition">VarIndex</span></a>) : <a class="idref" href="Verse.Verse.Language.Ast.html#code"><span class="id" title="definition">code</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.v"><span class="id" title="variable">v</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Language.Utils.html#foreach"><span class="id" title="definition">foreach</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#indices"><span class="id" title="definition">indices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="keyword">fun</span> <span class="id" title="var">i</span> <span class="id" title="var">pf</span> ⇒ <span class="id" title="keyword">let</span> <span class="id" title="var">ix</span> := @<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#exist"><span class="id" title="constructor">exist</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">arrI</span> := <a class="idref" href="Verse.Verse.Language.Ast.html#index"><span class="id" title="constructor">index</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arr"><span class="id" title="variable">arr</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">chI</span> := <a class="idref" href="Verse.Verse.Language.Ast.html#var"><span class="id" title="constructor">var</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#ch"><span class="id" title="variable">ch</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#pf"><span class="id" title="variable">pf</span></a>) <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">[</span></a> <a class="idref" href="Verse.Verse.Language.Ast.html#inst"><span class="id" title="constructor">inst</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#assign"><span class="id" title="constructor">assign</span></a> (<a class="idref" href="Verse.Verse.Language.Ast.html#assign2"><span class="id" title="constructor">assign2</span></a> <a class="idref" href="Verse.Verse.Language.Operators.html#nop"><span class="id" title="constructor">nop</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#arrI"><span class="id" title="variable">arrI</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#chI"><span class="id" title="variable">chI</span></a>)) <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Lists.List.html#64ee52ab9627fca8d637e2f1207a2990"><span class="id" title="notation">]</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;).<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Require</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#"><span class="id" title="library">Vector</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Import</span> <span class="id" title="var">Vector.VectorNotations</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Fixpoint</span> <a name="makeIndices"><span class="id" title="definition">makeIndices</span></a> (<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>)(<span class="id" title="var">l</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#72ca3fac4636a1b19c963b12162882cf"><span class="id" title="notation">{</span></a><span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#72ca3fac4636a1b19c963b12162882cf"><span class="id" title="notation">:</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#72ca3fac4636a1b19c963b12162882cf"><span class="id" title="notation">|</span></a> <span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#72ca3fac4636a1b19c963b12162882cf"><span class="id" title="notation">}</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">+</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">{</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">∃</span></a> <span class="id" title="var">i</span><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">,</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#In"><span class="id" title="inductive">Vector.In</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">∧</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">¬</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">(</span></a><a class="idref" href="Verse.Verse.Language.Utils.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">}</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Hint Constructors</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Vector.In"><span class="id" title="inductive">Vector.In</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">refine</span> (<span class="id" title="keyword">match</span> <span class="id" title="var">l</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.VectorDef.html#207d28e6e1fa33a63bfd7773812f7876"><span class="id" title="notation">[]</span></a>        ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inleft"><span class="id" title="constructor">inleft</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.VectorDef.html#207d28e6e1fa33a63bfd7773812f7876"><span class="id" title="notation">[]</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| (<span class="id" title="var">x</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.VectorDef.html#d9a34fade97b649eed4e6c435f1d827e"><span class="id" title="notation">::</span></a> <span class="id" title="var">xs</span>) ⇒<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.Compare_dec.html#lt_dec"><span class="id" title="lemma">lt_dec</span></a> <span class="id" title="var">x</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>, <span class="id" title="var">makeIndices</span> <span class="id" title="var">_</span> <span class="id" title="var">xs</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#left"><span class="id" title="constructor">left</span></a> <span class="id" title="var">pf</span>, <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inleft"><span class="id" title="constructor">inleft</span></a> <span class="id" title="var">ixs</span>  ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inleft"><span class="id" title="constructor">inleft</span></a> (@<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#exist"><span class="id" title="constructor">exist</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">x</span> <span class="id" title="var">pf</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.VectorDef.html#d9a34fade97b649eed4e6c435f1d827e"><span class="id" title="notation">::</span></a> <span class="id" title="var">ixs</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#right"><span class="id" title="constructor">right</span></a> <span class="id" title="var">pf</span>, <span class="id" title="var">_</span> ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inright"><span class="id" title="constructor">inright</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#ex_intro"><span class="id" title="constructor">ex_intro</span></a> <span class="id" title="var">_</span> <span class="id" title="var">x</span> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#conj"><span class="id" title="constructor">conj</span></a> <span class="id" title="var">_</span> <span class="id" title="var">pf</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#left"><span class="id" title="constructor">left</span></a> <span class="id" title="var">pf</span>, <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inright"><span class="id" title="constructor">inright</span></a> <span class="id" title="var">err</span> ⇒ <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#inright"><span class="id" title="constructor">inright</span></a> <span class="id" title="var">_</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>); <span class="id" title="tactic">eauto</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">err</span>. <span class="id" title="tactic">intuition</span>. <span class="id" title="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Error.html#"><span class="id" title="library">Verse.Error</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="tryMakeIndices"><span class="id" title="definition">tryMakeIndices</span></a> {<span class="id" title="var">n</span>}(<span class="id" title="var">v</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a>) := <a class="idref" href="Verse.Verse.Error.html#recover"><span class="id" title="definition">recover</span></a> (<a class="idref" href="Verse.Verse.Language.Utils.html#makeIndices"><span class="id" title="definition">makeIndices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#v"><span class="id" title="variable">v</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="shuffleIndices"><span class="id" title="definition">shuffleIndices</span></a> (<span class="id" title="var">v</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>) := <a class="idref" href="Verse.Verse.Language.Utils.html#tryMakeIndices"><span class="id" title="definition">tryMakeIndices</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#v"><span class="id" title="variable">v</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Often we want to ensure that a give list of shuffle indices is
+      a permutation. This proposition captures that property.
+     
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="Permutation"><span class="id" title="definition">Permutation</span></a> (<span class="id" title="var">v</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">{</span></a><span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">|</span></a> <span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">}</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a>) :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">let</span> <span class="id" title="var">forgetproof</span> <span class="id" title="var">ix</span> := <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#proj1_sig"><span class="id" title="definition">proj1_sig</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#ix"><span class="id" title="variable">ix</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>, <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils.b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#In"><span class="id" title="inductive">Vector.In</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#map"><span class="id" title="definition">Vector.map</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#forgetproof"><span class="id" title="variable">forgetproof</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#v"><span class="id" title="variable">v</span></a>).<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils.ArrayUtils"><span class="id" title="section">ArrayUtils</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Utils"><span class="id" title="section">Utils</span></a>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Section</span> <a name="Selection"><span class="id" title="section">Selection</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Selection.A"><span class="id" title="variable">A</span></a> : <span class="id" title="keyword">Type</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a name="Selection.b"><span class="id" title="variable">b</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+Often only a given set of variable indices is required. This function
+is used for that purpose.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="select"><span class="id" title="definition">select</span></a> {<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">inp</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Selection.A"><span class="id" title="variable">A</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Selection.b"><span class="id" title="variable">b</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">to</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">{</span></a><span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">|</span></a> <span class="id" title="var">i</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#989c98e7ddd65d5bf37c334ff2076de8"><span class="id" title="notation">&lt;</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Selection.b"><span class="id" title="variable">b</span></a><a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#5b63cb9ed0fed82566685c66e56592e4"><span class="id" title="notation">}</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#Selection.A"><span class="id" title="variable">A</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#n"><span class="id" title="variable">n</span></a><br/>
+&nbsp;&nbsp;:= <span class="id" title="keyword">let</span> <span class="id" title="var">mapper</span> <span class="id" title="var">idx</span> := <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#nth_order"><span class="id" title="definition">Vector.nth_order</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#inp"><span class="id" title="variable">inp</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#proj2_sig"><span class="id" title="definition">proj2_sig</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#idx"><span class="id" title="variable">idx</span></a>) <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#map"><span class="id" title="definition">Vector.map</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#mapper"><span class="id" title="variable">mapper</span></a> <a class="idref" href="Verse.Verse.Language.Utils.html#to"><span class="id" title="variable">to</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Selection"><span class="id" title="section">Selection</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Language.Utils.html#select"><span class="id" title="definition">select</span></a> [<span class="id" title="var">A</span> <span class="id" title="var">b</span> <span class="id" title="var">n</span>] <span class="id" title="var">_</span> <span class="id" title="var">_</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+A tactic notation for disposing permutation proofs. This would
+     work only when the vector is just a vector of constants. But that
+     is the kind of vectors that we mostly deal with crypto
+     implementation.  
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Global Hint Constructors</span> <a class="idref" href="Verse.Verse.Language.Utils.html#Vector.In"><span class="id" title="inductive">Vector.In</span></a>.<br/>
+<span class="id" title="keyword">Global</span> <span class="id" title="keyword">Tactic</span> <span class="id" title="keyword">Notation</span> "crush_permutation_obligation" <span class="id" title="var">integer</span>(<span class="id" title="var">B</span>) :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| [ <span class="id" title="var">H</span> : <span class="id" title="var">_</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#9b077c369e19739ef880736ba34623ff"><span class="id" title="notation">≤</span></a> <span class="id" title="var">_</span> |- <span class="id" title="var">_</span> ] ⇒ <span class="id" title="var">contradict</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">omega</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| [ <span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>    |- <span class="id" title="var">_</span> ] ⇒ <span class="id" title="tactic">destruct</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">eauto</span> <span class="id" title="var">B</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.Types.Internal</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.Types.Internal</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Error.html#"><span class="id" title="library">Verse.Error</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Word.html#"><span class="id" title="library">Verse.Word</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.Arith.html#"><span class="id" title="library">Arith</span></a>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">Nat</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab28"></a><h1 class="section">Types in its full glory.</h1>
+
+
+<div class="paragraph"> </div>
+
+The Verse EDSL is a typed machine language consisting of <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a></span>s,
+<span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a></span>s, and <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a></span>s of which the first two, i.e. <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a></span>s and
+<span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a></span>s, can reside in the registers of the machine where as
+<span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a></span>s are necessarily stored in the machine memory. The kind system
+indicates this distinction in type.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="kind"><span class="id" title="inductive">kind</span></a>   : <span class="id" title="keyword">Type</span> := <a name="direct"><span class="id" title="constructor">direct</span></a> | <a name="memory"><span class="id" title="constructor">memory</span></a>.<br/>
+<span class="id" title="keyword">Inductive</span> <a name="endian"><span class="id" title="inductive">endian</span></a> : <span class="id" title="keyword">Type</span> := <a name="bigE"><span class="id" title="constructor">bigE</span></a> | <a name="littleE"><span class="id" title="constructor">littleE</span></a> | <a name="hostE"><span class="id" title="constructor">hostE</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="type"><span class="id" title="inductive">type</span></a>       : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span> :=<br/>
+| <a name="word"><span class="id" title="constructor">word</span></a>               : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="multiword"><span class="id" title="constructor">multiword</span></a>          : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>    <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="array"><span class="id" title="constructor">array</span></a>              : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#endian"><span class="id" title="inductive">endian</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a><br/>
+.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Compute the size of a type in bytes. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a name="sizeOf"><span class="id" title="definition">sizeOf</span></a> {<span class="id" title="var">k</span>} (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#k"><span class="id" title="variable">k</span></a>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Verse.Verse.Types.Internal.html#ty"><span class="id" title="variable">ty</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a> <span class="id" title="var">n</span>         ⇒ 2 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a> <span class="id" title="var">n</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a> <span class="id" title="var">m</span> <span class="id" title="var">n</span>  ⇒ 2 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a> <span class="id" title="var">m</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#697e4695610f677ae98a52af81f779d2"><span class="id" title="notation">×</span></a> 2 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a> <span class="id" title="var">n</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <span class="id" title="var">n</span> <span class="id" title="var">_</span> <span class="id" title="var">tw</span> ⇒ <span class="id" title="var">n</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#697e4695610f677ae98a52af81f779d2"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#sizeOf"><span class="id" title="definition">sizeOf</span></a> <span class="id" title="var">tw</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Often we need to existentially quantify over types and other
+    objects. This definition is just for better readability.
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="some"><span class="id" title="definition">some</span></a> {<span class="id" title="var">P</span>: <span class="id" title="keyword">Type</span>} (<span class="id" title="var">A</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#P"><span class="id" title="variable">P</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>) := <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#sigT"><span class="id" title="inductive">sigT</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab29"></a><h2 class="section">Final representation.</h2>
+
+
+<div class="paragraph"> </div>
+
+The data types give the initial representation of verse types. It is
+often easier to work with a final representation of types particularly
+when we want to define semantics, pretty printing etc. The type class
+below provides the mechanism for this.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Class</span> <a name="typeC"><span class="id" title="record">typeC</span></a> (<span class="id" title="var">t</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>) := { <a name="mkWord"><span class="id" title="projection">mkWord</span></a>      : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="mkMultiword"><span class="id" title="projection">mkMultiword</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="mkArray"><span class="id" title="projection">mkArray</span></a>     : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#endian"><span class="id" title="inductive">endian</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Clearly the verse types are themselves an instance of the above type class 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="type_is_typeC"><span class="id" title="instance">type_is_typeC</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> :=<br/>
+&nbsp;&nbsp;{ <a class="idref" href="Verse.Verse.Types.Internal.html#mkWord"><span class="id" title="method">mkWord</span></a>      := <a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Types.Internal.html#mkMultiword"><span class="id" title="method">mkMultiword</span></a> := <a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a>;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Types.Internal.html#mkArray"><span class="id" title="method">mkArray</span></a>     := <a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a><br/>
+&nbsp;&nbsp;}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+Final representations can be seen as giving certain semantics for
+types, in the sense that it gives meaning for each type. The parameter
+<span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.t"><span class="id" title="variable">t</span></a></span> <span class="inlinecode">:</span> <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><span class="id" title="keyword">Type</span></span> is the domain of interpretation of types. The
+following function can now be seen as the translation from types of
+verse into the domain of interpretation which is <span class="inlinecode"><a class="idref" href="Verse.Verse.CryptoLib.sha2.c.portableAnnotated.html#SHA2.Program.t"><span class="id" title="variable">t</span></a></span>.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="typeDenote"><span class="id" title="definition">typeDenote</span></a> {<span class="id" title="var">t</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}{<span class="id" title="var">tc</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a>} {<span class="id" title="var">k</span>} (<span class="id" title="var">ty</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#k"><span class="id" title="variable">k</span></a>)  :  <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#k"><span class="id" title="variable">k</span></a>  :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Verse.Verse.Types.Internal.html#ty"><span class="id" title="variable">ty</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a> <span class="id" title="var">n</span>        ⇒ <a class="idref" href="Verse.Verse.Types.Internal.html#mkWord"><span class="id" title="method">mkWord</span></a> <span class="id" title="var">n</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a> <span class="id" title="var">m</span> <span class="id" title="var">n</span> ⇒ <a class="idref" href="Verse.Verse.Types.Internal.html#mkMultiword"><span class="id" title="method">mkMultiword</span></a> <span class="id" title="var">m</span> <span class="id" title="var">n</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#array"><span class="id" title="constructor">array</span></a> <span class="id" title="var">n</span> <span class="id" title="var">e</span> <span class="id" title="var">t</span>   ⇒ <a class="idref" href="Verse.Verse.Types.Internal.html#mkArray"><span class="id" title="method">mkArray</span></a> <span class="id" title="var">n</span> <span class="id" title="var">e</span> (<a class="idref" href="Verse.Verse.Types.Internal.html#typeDenote"><span class="id" title="definition">typeDenote</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#t"><span class="id" title="variable">t</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab30"></a><h1 class="section">Machine types and C language types</h1>
+
+
+<div class="paragraph"> </div>
+
+These are types that we encounter while translating code to C or for
+that matter machine language. We capture the translation via an
+explicit type and a final representation.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="UnsupportedType"><span class="id" title="inductive">UnsupportedType</span></a> : <span class="id" title="keyword">Prop</span> :=<br/>
+| <a name="unsupported"><span class="id" title="constructor">unsupported</span></a> : <span class="id" title="keyword">∀</span> <span class="id" title="var">k</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a>, <a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#k"><span class="id" title="variable">k</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#UnsupportedType"><span class="id" title="inductive">UnsupportedType</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Types.Internal.html#unsupported"><span class="id" title="constructor">unsupported</span></a> [<span class="id" title="var">k</span>] <span class="id" title="var">_</span>.<br/>
+<span class="id" title="keyword">Inductive</span> <a name="CType"><span class="id" title="inductive">CType</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span> :=<br/>
+| <a name="uint8_t"><span class="id" title="constructor">uint8_t</span></a>  : <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="uint16_t"><span class="id" title="constructor">uint16_t</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="uint32_t"><span class="id" title="constructor">uint32_t</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="uint64_t"><span class="id" title="constructor">uint64_t</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="CArray"><span class="id" title="constructor">CArray</span></a>   : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a>    <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a><br/>
+| <a name="CPtr"><span class="id" title="constructor">CPtr</span></a>     : <span class="id" title="keyword">∀</span> <span class="id" title="var">k</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a>, <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#k"><span class="id" title="variable">k</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a><br/>
+.<br/>
+
+<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">Verse.Error</span>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="wordToCWord"><span class="id" title="definition">wordToCWord</span></a> (<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="Verse.Verse.Types.Internal.html#CType"><span class="id" title="inductive">CType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">+</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">{</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#UnsupportedType"><span class="id" title="inductive">UnsupportedType</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">}</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| 0 ⇒ <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">{-</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#uint8_t"><span class="id" title="constructor">uint8_t</span></a>  <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">-}</span></a><br/>
+&nbsp;&nbsp;| 1 ⇒ <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">{-</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#uint16_t"><span class="id" title="constructor">uint16_t</span></a> <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">-}</span></a><br/>
+&nbsp;&nbsp;| 2 ⇒ <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">{-</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#uint32_t"><span class="id" title="constructor">uint32_t</span></a> <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">-}</span></a><br/>
+&nbsp;&nbsp;| 3 ⇒ <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">{-</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#uint64_t"><span class="id" title="constructor">uint64_t</span></a> <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">-}</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="var">_</span> ⇒ <a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">error</span></a> <a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">(</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#unsupported"><span class="id" title="constructor">unsupported</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>)<a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="MachineType"><span class="id" title="inductive">MachineType</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span> :=<br/>
+| <a name="Sized"><span class="id" title="constructor">Sized</span></a>    : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#MachineType"><span class="id" title="inductive">MachineType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a><br/>
+| <a name="Address"><span class="id" title="constructor">Address</span></a>  : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#MachineType"><span class="id" title="inductive">MachineType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Word denotation into a bound machine 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="wordToMachineWord"><span class="id" title="definition">wordToMachineWord</span></a> (<span class="id" title="var">b</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) (<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="Verse.Verse.Types.Internal.html#MachineType"><span class="id" title="inductive">MachineType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#direct"><span class="id" title="constructor">direct</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">+</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">{</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#UnsupportedType"><span class="id" title="inductive">UnsupportedType</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Specif.html#f54393d7670a5aa26d6e138373d42f1c"><span class="id" title="notation">}</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">if</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.Compare_dec.html#le_dec"><span class="id" title="lemma">le_dec</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#b"><span class="id" title="variable">b</span></a> <span class="id" title="keyword">then</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">{-</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Sized"><span class="id" title="constructor">Sized</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="Verse.Verse.Error.html#509f3c9de0509312cf78973d75032499"><span class="id" title="notation">-}</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">else</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">error</span></a> <a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">(</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#unsupported"><span class="id" title="constructor">unsupported</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>)<a class="idref" href="Verse.Verse.Error.html#c43a5b8182b4a5be8debf78d71005817"><span class="id" title="notation">)</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+An address inside the machine. There is no alignment restriction on it. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="byteAddress"><span class="id" title="definition">byteAddress</span></a> := <a class="idref" href="Verse.Verse.Types.Internal.html#Address"><span class="id" title="constructor">Address</span></a> 0.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="aligned"><span class="id" title="definition">aligned</span></a> (<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>)(<span class="id" title="var">addr</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#MachineType"><span class="id" title="inductive">MachineType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a>) : <a class="idref" href="Verse.Verse.Types.Internal.html#MachineType"><span class="id" title="inductive">MachineType</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#memory"><span class="id" title="constructor">memory</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="Verse.Verse.Types.Internal.html#addr"><span class="id" title="variable">addr</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="Verse.Verse.Types.Internal.html#Address"><span class="id" title="constructor">Address</span></a> <span class="id" title="var">m</span> ⇒ <a class="idref" href="Verse.Verse.Types.Internal.html#Address"><span class="id" title="constructor">Address</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#Nat.max"><span class="id" title="definition">max</span></a> <span class="id" title="var">m</span> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab31"></a><h2 class="section">Sematics of <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#type"><span class="id" title="inductive">type</span></a></span>'s as a final representation.</h2>
+
+
+<div class="paragraph"> </div>
+
+A special case of final representation is to encode types as Coq
+types. In this case the All we need in this case is a representation of
+words. Multi-words <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#multiword"><span class="id" title="constructor">multiword</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.Language.Operators.html#OpDenote.VectorAux.m"><span class="id" title="variable">m</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.Semantics.ScopeStore.html#Store.n"><span class="id" title="variable">n</span></a></span> are then defined as a vectors of
+these word type, and finally arrays are vectors over the element
+type. To support maximum flexibility, meaning of types are
+parameterised by the definition of the word.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Type</span> <a name="WORD_SEMANTICS"><span class="id" title="module">WORD_SEMANTICS</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="WORD_SEMANTICS.wordDenote"><span class="id" title="axiom">wordDenote</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>.<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Types.Internal.html#WORD_SEMANTICS"><span class="id" title="module">WORD_SEMANTICS</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="TypeDenote"><span class="id" title="definition">TypeDenote</span></a> := <span class="id" title="keyword">fun</span> <span class="id" title="var">_</span> : <a class="idref" href="Verse.Verse.Types.Internal.html#kind"><span class="id" title="inductive">kind</span></a> ⇒ <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="mkTypeDenote"><span class="id" title="definition">mkTypeDenote</span></a> (<span class="id" title="var">wordDenote</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>) : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#TypeDenote"><span class="id" title="definition">TypeDenote</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;:= {| <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">mkWord</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">:=</span></a> <span class="id" title="keyword">fun</span> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">⇒</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">wordDenote</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">;</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">mkMultiword</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">:=</span></a>  <span class="id" title="keyword">fun</span> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">m</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">⇒</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">Vector.t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">(</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">wordDenote</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">)</span></a>  <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">(2</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">^</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">m</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">);</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">mkArray</span></a>     <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">:=</span></a>  <span class="id" title="keyword">fun</span> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">_</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">(</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">:</span></a> <span class="id" title="keyword">Type</span><a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">)</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">⇒</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">Vector.t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">t</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#Build_typeC"><span class="id" title="constructor">n</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab32"></a><h3 class="section">The standard word semantics.</h3>
+
+
+<div class="paragraph"> </div>
+
+The standard semantics is were <span class="inlinecode"><a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a></span> <span class="inlinecode"><a class="idref" href="Verse.Verse.Semantics.ScopeStore.html#Store.n"><span class="id" title="variable">n</span></a></span> means unsigned integers of
+<span class="inlinecode"><span class="id" title="var"> 2<sup> n   </sup> </span></span> bytes. We refrain for defining an instance declaration here
+because there are other word semantics that are equally useful for us.
+It is expected that one declares a local instance as the application
+demands.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <a class="idref" href="Verse.Verse.Nibble.html#"><span class="id" title="library">Verse.Nibble</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Elements of the word type are represented as nibbles 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="wordRep"><span class="id" title="definition">wordRep</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span> := <span class="id" title="keyword">fun</span> <span class="id" title="var">n</span> ⇒ <a class="idref" href="Verse.Verse.Nibble.html#bytes"><span class="id" title="definition">Nibble.bytes</span></a> (2<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>).<br/>
+<span class="id" title="keyword">Definition</span> <a name="ConstRep"><span class="id" title="definition">ConstRep</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#TypeDenote"><span class="id" title="definition">TypeDenote</span></a> := <a class="idref" href="Verse.Verse.Types.Internal.html#mkTypeDenote"><span class="id" title="definition">mkTypeDenote</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#wordRep"><span class="id" title="definition">wordRep</span></a>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">Verse.PrettyPrint</span>.<br/>
+<span class="id" title="keyword">Global Instance</span> <a name="constant_pretty"><span class="id" title="instance">constant_pretty</span></a> <span class="id" title="var">n</span> : <a class="idref" href="Verse.Verse.PrettyPrint.html#PrettyPrint"><span class="id" title="class">PrettyPrint</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#wordRep"><span class="id" title="definition">wordRep</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>) := <a class="idref" href="Verse.Verse.Nibble.html#pretty_print"><span class="id" title="instance">Nibble.pretty_print</span></a> (2 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#697e4695610f677ae98a52af81f779d2"><span class="id" title="notation">×</span></a> 2<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a><span class="id" title="var">n</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Word.html#"><span class="id" title="library">Verse.Word</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Module</span> <a name="StandardWord"><span class="id" title="module">StandardWord</span></a> &lt;: <a class="idref" href="Verse.Verse.Types.Internal.html#WORD_SEMANTICS"><span class="id" title="module">WORD_SEMANTICS</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="StandardWord.wordDenote"><span class="id" title="definition">wordDenote</span></a> := <span class="id" title="keyword">fun</span> <span class="id" title="var">n</span> ⇒ <a class="idref" href="Verse.Verse.Word.html#bytes"><span class="id" title="definition">Word.bytes</span></a> (2<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Arith.PeanoNat.html#4c362bcf0e947e2792a2e6989b44aeb0"><span class="id" title="notation">^</span></a><a class="idref" href="Verse.Verse.Types.Internal.html#n"><span class="id" title="variable">n</span></a>).<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.Types.Internal.html#StandardWord"><span class="id" title="module">StandardWord</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="StandardTypeDenote"><span class="id" title="instance">StandardTypeDenote</span></a> : <a class="idref" href="Verse.Verse.Types.Internal.html#typeC"><span class="id" title="class">typeC</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#TypeDenote"><span class="id" title="definition">TypeDenote</span></a> := <a class="idref" href="Verse.Verse.Types.Internal.html#mkTypeDenote"><span class="id" title="definition">mkTypeDenote</span></a> <a class="idref" href="Verse.Verse.Types.Internal.html#wordDenote"><span class="id" title="definition">StandardWord.wordDenote</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

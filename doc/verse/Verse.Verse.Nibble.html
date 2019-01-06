@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.Nibble</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.Nibble</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#"><span class="id" title="library">Vector</span></a>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">Vector.VectorNotations</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.Ascii.html#"><span class="id" title="library">Ascii</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#"><span class="id" title="library">String</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.Error.html#"><span class="id" title="library">Verse.Error</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Numbers.BinNums.html#"><span class="id" title="library">BinNums</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.NArith.html#"><span class="id" title="library">NArith</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="Nibble"><span class="id" title="inductive">Nibble</span></a><br/>
+&nbsp;&nbsp;:= <a name="Ox0"><span class="id" title="constructor">Ox0</span></a> | <a name="Ox1"><span class="id" title="constructor">Ox1</span></a> | <a name="Ox2"><span class="id" title="constructor">Ox2</span></a> | <a name="Ox3"><span class="id" title="constructor">Ox3</span></a> | <a name="Ox4"><span class="id" title="constructor">Ox4</span></a> | <a name="Ox5"><span class="id" title="constructor">Ox5</span></a> | <a name="Ox6"><span class="id" title="constructor">Ox6</span></a> | <a name="Ox7"><span class="id" title="constructor">Ox7</span></a> | <a name="Ox8"><span class="id" title="constructor">Ox8</span></a> | <a name="Ox9"><span class="id" title="constructor">Ox9</span></a> |<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="OxA"><span class="id" title="constructor">OxA</span></a> | <a name="OxB"><span class="id" title="constructor">OxB</span></a> | <a name="OxC"><span class="id" title="constructor">OxC</span></a> | <a name="OxD"><span class="id" title="constructor">OxD</span></a> | <a name="OxE"><span class="id" title="constructor">OxE</span></a> | <a name="OxF"><span class="id" title="constructor">OxF</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="bytes"><span class="id" title="definition">bytes</span></a> <span class="id" title="var">n</span> := <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="Verse.Verse.Nibble.html#Nibble"><span class="id" title="inductive">Nibble</span></a> (2 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#697e4695610f677ae98a52af81f779d2"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Nibble.html#n"><span class="id" title="variable">n</span></a>).<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="EncodeError"><span class="id" title="inductive">EncodeError</span></a> : <span class="id" title="keyword">Prop</span> := <a name="BadBase16"><span class="id" title="constructor">BadBase16</span></a> | <a name="TooFewDigits"><span class="id" title="constructor">TooFewDigits</span></a> | <a name="TooManyDigits"><span class="id" title="constructor">TooManyDigits</span></a>.<br/>
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab22"></a><h2 class="section">Base16 representation.</h2>
+
+
+<div class="paragraph"> </div>
+
+We define a convenient function to represent word constants in hex
+notation. A 16-bit word of value AABB (in hex notation) can be
+represented as <span class="inlinecode"><a class="idref" href="Verse.Verse.Nibble.html#Ox"><span class="id" title="definition">Ox</span></a></span> <span class="inlinecode">&quot;<span class="id" title="var">aabb</span>&quot;</span>.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="Ox"><span class="id" title="definition">Ox</span></a> <span class="id" title="var">s</span> := <span class="id" title="keyword">let</span> <span class="id" title="var">t</span> := <a class="idref" href="Verse.Verse.Nibble.html#trim_separators"><span class="id" title="definition">Internal.trim_separators</span></a> <a class="idref" href="Verse.Verse.Nibble.html#s"><span class="id" title="variable">s</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">in</span> <a class="idref" href="Verse.Verse.Error.html#recover"><span class="id" title="definition">recover</span></a> (<a class="idref" href="Verse.Verse.Nibble.html#fromString"><span class="id" title="definition">Internal.fromString</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Strings.String.html#length"><span class="id" title="definition">String.length</span></a> <a class="idref" href="Verse.Verse.Nibble.html#t"><span class="id" title="variable">t</span></a>) <a class="idref" href="Verse.Verse.Nibble.html#t"><span class="id" title="variable">t</span></a>).<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.PrettyPrint.html#"><span class="id" title="library">Verse.PrettyPrint</span></a>.<br/>
+<span class="id" title="keyword">Instance</span> <a name="pretty_print"><span class="id" title="instance">pretty_print</span></a> (<span class="id" title="var">n</span> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="Verse.Verse.PrettyPrint.html#PrettyPrint"><span class="id" title="class">PrettyPrint</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="Verse.Verse.Nibble.html#Nibble"><span class="id" title="inductive">Nibble</span></a> <a class="idref" href="Verse.Verse.Nibble.html#n"><span class="id" title="variable">n</span></a>) :=<br/>
+&nbsp;&nbsp;{ <a class="idref" href="Verse.Verse.PrettyPrint.html#doc"><span class="id" title="method">doc</span></a> := <span class="id" title="keyword">fun</span> <span class="id" title="var">v</span> ⇒ <a class="idref" href="Verse.Verse.PrettyPrint.html#text"><span class="id" title="definition">text</span></a> (<a class="idref" href="Verse.Verse.Nibble.html#toString"><span class="id" title="definition">Internal.toString</span></a> <a class="idref" href="Verse.Verse.Nibble.html#v"><span class="id" title="variable">v</span></a>) }.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="toN"><span class="id" title="definition">toN</span></a> {<span class="id" title="var">n</span>} : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> <a class="idref" href="Verse.Verse.Nibble.html#Nibble"><span class="id" title="inductive">Nibble</span></a> <a class="idref" href="Verse.Verse.Nibble.html#n"><span class="id" title="variable">n</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">→</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Numbers.BinNums.html#N"><span class="id" title="inductive">N</span></a> :=<br/>
+&nbsp;&nbsp;(<span class="id" title="keyword">let</span> <span class="id" title="var">fldr</span> := <span class="id" title="keyword">fun</span> <span class="id" title="var">m</span> <span class="id" title="var">x</span> ⇒  16 <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#fc17f9323d9379ee88884ec6db59a3df"><span class="id" title="notation">×</span></a> <a class="idref" href="Verse.Verse.Nibble.html#m"><span class="id" title="variable">m</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#3eae0a7077c32c35751dcbc966d4030e"><span class="id" title="notation">+</span></a> <a class="idref" href="Verse.Verse.Nibble.html#nibbleToN"><span class="id" title="definition">Internal.nibbleToN</span></a> <a class="idref" href="Verse.Verse.Nibble.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">in</span><br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#fold_left"><span class="id" title="definition">Vector.fold_left</span></a> <a class="idref" href="Verse.Verse.Nibble.html#fldr"><span class="id" title="variable">fldr</span></a> 0)%<span class="id" title="var">N</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="fromN"><span class="id" title="definition">fromN</span></a>   <span class="id" title="var">l</span> <span class="id" title="var">n</span> := <a class="idref" href="Verse.Verse.Nibble.html#fromNR"><span class="id" title="definition">Internal.fromNR</span></a> <a class="idref" href="Verse.Verse.Nibble.html#l"><span class="id" title="variable">l</span></a> <a class="idref" href="Verse.Verse.Nibble.html#n"><span class="id" title="variable">n</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="fromNat"><span class="id" title="definition">fromNat</span></a> <span class="id" title="var">l</span> <span class="id" title="var">n</span> := <a class="idref" href="Verse.Verse.Nibble.html#fromN"><span class="id" title="definition">fromN</span></a> <a class="idref" href="Verse.Verse.Nibble.html#l"><span class="id" title="variable">l</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.NArith.BinNat.html#N_of_nat"><span class="id" title="abbreviation">N_of_nat</span></a> <a class="idref" href="Verse.Verse.Nibble.html#n"><span class="id" title="variable">n</span></a>).<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Nibble.html#fromN"><span class="id" title="definition">fromN</span></a> [<span class="id" title="var">l</span>] <span class="id" title="var">_</span>.<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="Verse.Verse.Nibble.html#fromNat"><span class="id" title="definition">fromNat</span></a> [<span class="id" title="var">l</span>] <span class="id" title="var">_</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

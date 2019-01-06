@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.CryptoLib.chacha20.common</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.CryptoLib.chacha20.common</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.html#"><span class="id" title="library">Verse</span></a>.<br/>
+</div>
+
+<div class="doc">
+Types relevant to Chacha20
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="Word"><span class="id" title="definition">Word</span></a>    := <a class="idref" href="Verse.Verse.Types.html#Word32"><span class="id" title="abbreviation">Word32</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+While ChaCha20 is defined on little endian, when using chacha20 as a
+csprg we really do not care about the endianness. It therefore makes
+sense to have a host endian variant which might be marginally faster
+as well.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="Block"><span class="id" title="definition">Block</span></a> <span class="id" title="var">e</span> := <a class="idref" href="Verse.Verse.Types.html#Array"><span class="id" title="definition">Array</span></a> 16 <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#e"><span class="id" title="variable">e</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="Key"><span class="id" title="definition">Key</span></a>     := <a class="idref" href="Verse.Verse.Types.html#Array"><span class="id" title="definition">Array</span></a> 8 <a class="idref" href="Verse.Verse.Types.Internal.html#hostE"><span class="id" title="constructor">hostE</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="IV"><span class="id" title="definition">IV</span></a>      := <a class="idref" href="Verse.Verse.Types.html#Array"><span class="id" title="definition">Array</span></a> 3 <a class="idref" href="Verse.Verse.Types.Internal.html#hostE"><span class="id" title="constructor">hostE</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="Counter"><span class="id" title="definition">Counter</span></a> := <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Constants used in ChaCha20 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="C0"><span class="id" title="definition">C0</span></a> : <a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a> := <a class="idref" href="Verse.Verse.Nibble.html#Ox"><span class="id" title="definition">Ox</span></a> "61:70:78:65".<br/>
+<span class="id" title="keyword">Definition</span> <a name="C1"><span class="id" title="definition">C1</span></a> : <a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a> := <a class="idref" href="Verse.Verse.Nibble.html#Ox"><span class="id" title="definition">Ox</span></a> "33:20:64:6e".<br/>
+<span class="id" title="keyword">Definition</span> <a name="C2"><span class="id" title="definition">C2</span></a> : <a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a> := <a class="idref" href="Verse.Verse.Nibble.html#Ox"><span class="id" title="definition">Ox</span></a> "79:62:2d:32".<br/>
+<span class="id" title="keyword">Definition</span> <a name="C3"><span class="id" title="definition">C3</span></a> : <a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> <a class="idref" href="Verse.Verse.CryptoLib.chacha20.common.html#Word"><span class="id" title="definition">Word</span></a> := <a class="idref" href="Verse.Verse.Nibble.html#Ox"><span class="id" title="definition">Ox</span></a> "6b:20:65:74".<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>Verse.Verse.CryptoLib.sha2</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library Verse.Verse.CryptoLib.sha2</h1>
+
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Verse.Verse.html#"><span class="id" title="library">Verse</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#"><span class="id" title="library">Vector</span></a>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">VectorNotations</span>.<br/>
+<span class="id" title="keyword">Delimit</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">vector_scope</span> <span class="id" title="keyword">with</span> <span class="id" title="var">vector</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab82"></a><h1 class="section">SHA-2 hashes</h1>
+
+
+<div class="paragraph"> </div>
+
+The two hashes SHA512 and SHA256 have very similar structure defering
+only in some parameters. We take advantage on the eDSL nature of verse
+to share as much code as possible between the two implementation. This
+code is parameterised by the following module type.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Module</span> <span class="id" title="keyword">Type</span> <a name="CONFIG"><span class="id" title="module">CONFIG</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The size of the word type for the hash 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.WordSize"><span class="id" title="axiom">WordSize</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The number of rounds that is involved in hashing. 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameters</span> <a name="CONFIG.ROUNDS"><span class="id" title="axiom">ROUNDS</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The round constants for the hash 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.KVec"><span class="id" title="axiom">KVec</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Vectors.Vector.html#t"><span class="id" title="inductive">Vector.t</span></a> (<a class="idref" href="Verse.Verse.Types.html#constant"><span class="id" title="definition">constant</span></a> (<a class="idref" href="Verse.Verse.Types.Internal.html#word"><span class="id" title="constructor">word</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.WordSize"><span class="id" title="axiom">WordSize</span></a>)) <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.ROUNDS"><span class="id" title="axiom">ROUNDS</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab83"></a><h2 class="section">The sigma functions.</h2>
+
+
+<div class="paragraph"> </div>
+
+   Both sha512 and sha256 uses the functions Σ₀, Σ₁, σ₀, and σ₁
+   defined as follows
+
+<div class="paragraph"> </div>
+
+   <span class="inlinecode"></span> <span class="inlinecode"><span class="id" title="var">Σ₀</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R00"><span class="id" title="definition">R00</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R01"><span class="id" title="definition">R01</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R02"><span class="id" title="definition">R02</span></a>)</span> <span class="inlinecode"></span>
+
+<div class="paragraph"> </div>
+
+   <span class="inlinecode"></span> <span class="inlinecode"><span class="id" title="var">Σ₁</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R10"><span class="id" title="definition">R10</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R11"><span class="id" title="definition">R11</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.R12"><span class="id" title="definition">R12</span></a>)</span> <span class="inlinecode"></span>
+
+<div class="paragraph"> </div>
+
+   <span class="inlinecode"></span> <span class="inlinecode">σ<span class="id" title="var">₀</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.r10"><span class="id" title="definition">r10</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.r11"><span class="id" title="definition">r11</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">ShiftR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<span class="id" title="var">S12</span>)</span> <span class="inlinecode"></span>
+
+<div class="paragraph"> </div>
+
+   <span class="inlinecode"></span> <span class="inlinecode">σ<span class="id" title="var">₁</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>)</span> <span class="inlinecode">=</span> <span class="inlinecode"><span class="id" title="var">RotR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.r10"><span class="id" title="definition">r10</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">RotR</span></span> <span class="inlinecode">(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<a class="idref" href="Verse.Verse.CryptoLib.sha512.c.portable.html#Config.r11"><span class="id" title="definition">r11</span></a>)</span> <span class="inlinecode">⊕</span> <span class="inlinecode"><span class="id" title="var">ShiftR</span>(<a class="idref" href="Verse.Verse.Arch.C.html#x"><span class="id" title="variable">x</span></a>,<span class="id" title="var">S12</span>)</span> <span class="inlinecode"></span>
+
+<div class="paragraph"> </div>
+
+   
+<div class="paragraph"> </div>
+
+
+<div class="paragraph"> </div>
+
+   While the Σ₀ and Σ₁ are used in the message schedule, the functions
+   σ₀ and σ₁ are used in the transformation of the hash state.  We
+   parametrise these functions via the rotation and shift offsets.
+
+<div class="paragraph"> </div>
+
+   
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.R00"><span class="id" title="axiom">R00</span></a> <a name="CONFIG.R01"><span class="id" title="axiom">R01</span></a> <a name="CONFIG.R02"><span class="id" title="axiom">R02</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.R10"><span class="id" title="axiom">R10</span></a> <a name="CONFIG.R11"><span class="id" title="axiom">R11</span></a> <a name="CONFIG.R12"><span class="id" title="axiom">R12</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.r00"><span class="id" title="axiom">r00</span></a> <a name="CONFIG.r01"><span class="id" title="axiom">r01</span></a> <a name="CONFIG.s0"><span class="id" title="axiom">s0</span></a>  : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.r10"><span class="id" title="axiom">r10</span></a> <a name="CONFIG.r11"><span class="id" title="axiom">r11</span></a> <a name="CONFIG.s1"><span class="id" title="axiom">s1</span></a>  : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Notice that the functions are invariant under the permutation of
+     the rotation offsets. However, assuming these additional
+     constraints on these offsets, helps us give efficient
+     implementations; we can optimise them for number of temporary
+     variables.
+
+<div class="paragraph"> </div>
+
+   
+</div>
+<div class="code">
+
+<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.increasing_R's"><span class="id" title="axiom">increasing_R's</span></a> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R00"><span class="id" title="axiom">R00</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#5b045077597c2458ff66998b6cb1d006"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R01"><span class="id" title="axiom">R01</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#5b045077597c2458ff66998b6cb1d006"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R02"><span class="id" title="axiom">R02</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">∧</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R10"><span class="id" title="axiom">R10</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#5b045077597c2458ff66998b6cb1d006"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R11"><span class="id" title="axiom">R11</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#5b045077597c2458ff66998b6cb1d006"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.R12"><span class="id" title="axiom">R12</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Parameter</span> <a name="CONFIG.increasing_r's"><span class="id" title="axiom">increasing_r's</span></a> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.r00"><span class="id" title="axiom">r00</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#9b077c369e19739ef880736ba34623ff"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.r01"><span class="id" title="axiom">r01</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">∧</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.r10"><span class="id" title="axiom">r10</span></a> <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Peano.html#9b077c369e19739ef880736ba34623ff"><span class="id" title="notation">≤</span></a> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG.r11"><span class="id" title="axiom">r11</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Verse.Verse.CryptoLib.sha2.html#CONFIG"><span class="id" title="module">CONFIG</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+A single block of both sha512 and sha256 are 16-words in big endian
+and the hash value is 8-words long.
+
+<div class="paragraph"> </div>
+
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="HASH_SIZE"><span class="id" title="definition">HASH_SIZE</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := 8.<br/>
+<span class="id" title="keyword">Definition</span> <a name="BLOCK_SIZE"><span class="id" title="definition">BLOCK_SIZE</span></a> : <a class="idref" href="http://coq.inria.fr/distrib/8.6.1/stdlib/Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> := 16.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
