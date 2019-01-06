@@ -11,9 +11,17 @@ cabal new-build
 cabal new-exec site build
 
 # Build html documentations for verse
-make -C verse-coq html
-mkdir -p _site/doc/verse
-mv verse-coq/html _site/doc/verse
+git submodule update --init
+cd verse-coq
+eval $(opam config env)
+./configure.sh
+cd ..
+if make -C verse-coq html
+then
+    rm _site/doc/verse -rf
+    mkdir -p _site/doc/
+    mv verse-coq/html _site/doc/verse
+fi
 
 # Get previous files
 git fetch --all
